@@ -1,17 +1,9 @@
 #!/usr/bin/env python
 #
-# https://www.dexterindustries.com/BrickPi/
-# https://github.com/DexterInd/BrickPi3
-#
-# Copyright (c) 2016 Dexter Industries
-# Released under the MIT license (http://choosealicense.com/licenses/mit/).
-# For more information, see https://github.com/DexterInd/BrickPi3/blob/master/LICENSE.md
-#
-# This code is an example for running a motor a target speed (specified in Degrees Per Second) set by the encoder of another motor.
 # 
-# Hardware: Connect EV3 or NXT motors to the BrickPi3 motor ports A and D. Make sure that the BrickPi3 is running on a 9v power supply.
+# Hardware:
 #
-# Results:  When you run this program, motor A speed will be controlled by the position of motor D. Manually rotate motor D, and motor A's speed will change.
+# Results:
 
 from __future__ import print_function # use python 3 syntax but make it compatible with python 2
 from __future__ import division       #                           ''
@@ -28,16 +20,24 @@ try:
     except IOError as error:
         print(error)
     
-    BP.set_motor_power(BP.PORT_D, BP.MOTOR_FLOAT)                          # float motor D
-    #BP.set_motor_limits(BP.PORT_A, 50)                                     # optionally set a power limit
+    # BP.set_motor_power(BP.PORT_D, BP.MOTOR_FLOAT)                          # float motor D
+    BP.set_motor_limits(BP.PORT_A, 50)                                     # optionally set a power limit
+    BP.set_motor_limits(BP.PORT_D, 50)                                     # optionally set a power limit
     while True:
-        # The following BP.get_motor_encoder function returns the encoder value
-        try:
-            target = BP.get_motor_encoder(BP.PORT_D)     # read motor D's position
-        except IOError as error:
-            print(error)
+        target = 180 #dps
+        robot_width = 20
         
         BP.set_motor_dps(BP.PORT_A, target)             # set the target speed for motor A in Degrees Per Second
+        BP.set_motor_dps(BP.PORT_D, target)
+        
+        t = 4.24 # time to run a side
+        t2 = 3.3 # time to turn
+        
+        time.sleep(t)
+        
+        BP.set_motor_dps(BP.PORT_A, 0)             # set the target speed for motor A in Degrees Per Second
+        
+        time.sleep(t2)
         
         print(("Motor A Target Degrees Per Second: %d" % target), "  Motor A Status: ", BP.get_motor_status(BP.PORT_A))
         

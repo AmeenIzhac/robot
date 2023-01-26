@@ -11,7 +11,7 @@
 # 
 # Hardware: Connect EV3 or NXT motors to the BrickPi3 motor ports B and C. Make sure that the BrickPi3 is running on a 9v power supply.
 #
-# Results:  When you run this program, motor C power will be controlled by the position of motor B. Manually rotate motor B, and motor C's power will change.
+# Results:  When you run this program, motor D power will be controlled by the position of motor A. Manually rotate motor A, and motor D's power will change.
 
 from __future__ import print_function # use python 3 syntax but make it compatible with python 2
 from __future__ import division       #                           ''
@@ -23,14 +23,14 @@ BP = brickpi3.BrickPi3() # Create an instance of the BrickPi3 class. BP will be 
 
 try:
     try:
-        BP.offset_motor_encoder(BP.PORT_B, BP.get_motor_encoder(BP.PORT_B)) # reset encoder B
+        BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A)) # reset encoder A
     except IOError as error:
         print(error)
     
     while True:
-        # The following BP.get_motor_encoder function returns the encoder value (what we want to use to control motor C's power).
+        # The following BP.get_motor_encoder function returns the encoder value (what we want to use to control motor D's power).
         try:
-            power = BP.get_motor_encoder(BP.PORT_B) / 10
+            power = BP.get_motor_encoder(BP.PORT_A) / 10
             if power > 100:
                 power = 100
             elif power < -100:
@@ -38,7 +38,8 @@ try:
         except IOError as error:
             print(error)
             power = 0
-        BP.set_motor_power(BP.PORT_C, power)
+        BP.set_motor_power(BP.PORT_D, power)
+        print(("Motor D Power: %d" % power), "  Motor D Status: ", BP.get_motor_status(BP.PORT_D))
         
         time.sleep(0.02)  # delay for 0.02 seconds (20ms) to reduce the Raspberry Pi CPU load.
 
